@@ -15,21 +15,28 @@
             text-align: center;
         }
         button {
-            width:33%;
-            height:25px;
+            width: 20%;
+            height: 25px;
             cursor: pointer;
+        }
+        .bbutton {
+            width: 33%;
+        }
+        #folders {
+            height: 25px;
         }
     </style>
 </head>
 
 <body>
+    <span id="folders"></span>
     <canvas id="catchit">
         <p>Your browser does not support the canvas tag.</p>
     </canvas>
     <br>
-    <button style="float:left;"onclick='socket.emit("prev",tag)'>Prev</button>
-    <button style="float:center;"onclick='tag="DELETE"'>Delete</button>
-    <button style="float:right;"onclick='socket.emit("next",tag)'>Next</button>
+    <button class="bbutton" style="float:left;"onclick='socket.emit("prev",tag)'>Prev</button>
+    <button class="bbutton" style="float:center;"onclick='tag="DELETE"'>Delete</button>
+    <button class="bbutton" style="float:right;"onclick='socket.emit("next",tag)'>Next</button>
     <script src="/socket.io/socket.io.js"></script>
     <script src="jquery-1.11.1.js"></script>
     <script>
@@ -37,6 +44,7 @@
         let can, ctx, ww, hh, width, height;
         
         let tag='';
+        let folderRow=1;
 
         let socket = io();
 
@@ -48,30 +56,38 @@
             tag='';
         });
 
+        socket.on('folders',function(f) {
+            document.getElementById("folders").innerHTML="";
+            for (let i=0;i<f.length;i++) {
+                document.getElementById("folders").innerHTML+=`<button onclick='tag="${f[i]}";'>${f[i]}</button>`
+            }
+            folderRow=Math.ceil(f.length/5);
+            resize();
+        });
+
+        function resize() {
+            ww = window.innerWidth;
+            hh = window.innerHeight;
+
+            width = ww;
+            height = hh - 10 - 25 - 25*folderRow;
+
+            $("#catchit").attr("width", width);
+            $("#catchit").attr("height", height);
+            $("#catchit").css({ "width": width });
+            $("#catchit").css({ "height": height });
+
+            ctx.fillStyle = "#215968;";
+            ctx.fillRect(0, 0, width, height);
+        }
+
         $(document).ready(function () {
             can = document.getElementById("catchit");
             ctx = can.getContext("2d");
 
-            //initialises canvas and sets dimensions to maximum
             $(window).resize(function () {
                 resize();
             });
-            function resize() {
-                ww = $(window).width();
-                hh = $(window).height();
-
-                width = ww - 20;
-                height = hh - 20 - 50;
-
-                $("#catchit").attr("width", width);
-                $("#catchit").attr("height", height);
-                $("#catchit").css({ "width": width });
-                $("#catchit").css({ "height": height });
-
-                ctx.fillStyle = "#215968;";
-                ctx.fillRect(0, 0, width, height);
-            }
-
             $(window).bind("load", function () {
                 resize();
             });

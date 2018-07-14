@@ -15,12 +15,13 @@ app.get('/admin', function(req, res) {
 });
 
 let imagePointer = 0;
-let folders = [];
+let folders = ["one","two","three","four"];
 
 io.on('connection', function(socket) {
         // create client id, store it in array, and send it to client
         socket.on('getimage', function () {
             //socket.emit('sent id',socket.id);
+            socket.emit('folders',folders);
         });
 
         socket.on('next', function(t) {
