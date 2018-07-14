@@ -40,6 +40,7 @@
     <button class="bbutton" style="float:right;"onclick='socket.emit("next",tag)'>Next</button>
     <script src="/socket.io/socket.io.js"></script>
     <script src="jquery-1.11.1.js"></script>
+    <img id="tempImg" src="input/1.JPG">
     <script>
         // variables to determine canvas pixel size
         let can, ctx, ww, hh, width, height;
@@ -52,10 +53,18 @@
         socket.on('connect', function (data) {
             socket.emit('getimage', '');
         });
-
-        socket.on('image',function(i) {
+        let img;
+        socket.on('image',function(image, buffer) {
             tag='';
             clearButtons();
+            console.log('got img');
+            console.log(image.buffer);
+            console.log(buffer);
+            document.getElementById("tempImg").src = 'data:image/jpeg;base64,' + image.buffer;
+            document.getElementById("tempImg").onload = function() {
+                console.log('image loaded');
+                ctx.drawImage(document.getElementById("tempImg"), 0, 0);
+            };
         });
 
         socket.on('folders',function(f) {

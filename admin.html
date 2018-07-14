@@ -4,12 +4,20 @@
     <title>Admin - NIS</title>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; background:#000000;}
+      body { font: 13px Helvetica, Arial; background:#000000;text-align:center;}
+      button {
+            width: 33%;
+            height: 50px;
+            cursor: pointer;
+        }
     </style>
   </head>
   <body>
     <script src="/socket.io/socket.io.js"></script>
+    <br>
+    <button onclick="socket.emit('init','');">Init</button>
     <script>
+      let socket = io();
       socket.on('connect', function (data) {
         //socket.emit('storeClientInfo','');
       });
