@@ -23,6 +23,7 @@
             width: 33%;
         }
         #folders {
+            padding-top: 5px;
             height: 25px;
         }
     </style>
@@ -35,7 +36,7 @@
     </canvas>
     <br>
     <button class="bbutton" style="float:left;"onclick='socket.emit("prev",tag)'>Prev</button>
-    <button class="bbutton" style="float:center;"onclick='tag="DELETE"'>Delete</button>
+    <button id="del" class="bbutton" style="float:center;"onclick='tag="DELETE";clearButtons();this.style.backgroundColor="red";'>Delete</button>
     <button class="bbutton" style="float:right;"onclick='socket.emit("next",tag)'>Next</button>
     <script src="/socket.io/socket.io.js"></script>
     <script src="jquery-1.11.1.js"></script>
@@ -54,12 +55,13 @@
 
         socket.on('image',function(i) {
             tag='';
+            clearButtons();
         });
 
         socket.on('folders',function(f) {
             document.getElementById("folders").innerHTML="";
             for (let i=0;i<f.length;i++) {
-                document.getElementById("folders").innerHTML+=`<button onclick='tag="${f[i]}";'>${f[i]}</button>`
+                document.getElementById("folders").innerHTML+=`<button onclick='tag="${f[i]}";clearButtons();this.style.backgroundColor="red";'>${f[i]}</button>`
             }
             folderRow=Math.ceil(f.length/5);
             resize();
@@ -79,6 +81,13 @@
 
             ctx.fillStyle = "#215968;";
             ctx.fillRect(0, 0, width, height);
+        }
+
+        function clearButtons() {
+            let b = document.getElementsByTagName("button");
+            for (let i = 0; i < b.length; i++) {
+                b[i].style.backgroundColor="";
+            }
         }
 
         $(document).ready(function () {
