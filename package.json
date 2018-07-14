@@ -1,11 +1,11 @@
 {
-  "name": "socket.io-chat",
+  "name": "nodeimagesorter",
   "version": "0.0.0",
-  "description": "A simple chat client using socket.io",
+  "description": "An automated tool to help sort images",
   "main": "index.js",
-  "author": "Grant Timmerman",
+  "author": "Jarrad Law",
   "private": true,
-  "license": "BSD",
+  "license": "MIT",
   "dependencies": {
     "express": "4.13.4",
     "socket.io": "2.1.1"
