@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Images - NIS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font: 13px Helvetica, Arial;
+            text-align: center;
+        }
+        button {
+            width:33%;
+            height:25px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="catchit">
+        <p>Your browser does not support the canvas tag.</p>
+    </canvas>
+    <br>
+    <button style="float:left;"onclick='socket.emit("prev",tag)'>Prev</button>
+    <button style="float:center;"onclick='tag="DELETE"'>Delete</button>
+    <button style="float:right;"onclick='socket.emit("next",tag)'>Next</button>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="jquery-1.11.1.js"></script>
+    <script>
+        // variables to determine canvas pixel size
+        let can, ctx, ww, hh, width, height;
+        
+        let tag='';
+
+        let socket = io();
+
+        socket.on('connect', function (data) {
+            socket.emit('getimage', '');
+        });
+
+        socket.on('image',function(i) {
+            tag='';
+        });
+
+        $(document).ready(function () {
+            can = document.getElementById("catchit");
+            ctx = can.getContext("2d");
+
+            //initialises canvas and sets dimensions to maximum
+            $(window).resize(function () {
+                resize();
+            });
+            function resize() {
+                ww = $(window).width();
+                hh = $(window).height();
+
+                width = ww - 20;
+                height = hh - 20 - 50;
+
+                $("#catchit").attr("width", width);
+                $("#catchit").attr("height", height);
+                $("#catchit").css({ "width": width });
+                $("#catchit").css({ "height": height });
+
+                ctx.fillStyle = "#215968;";
+                ctx.fillRect(0, 0, width, height);
+            }
+
+            $(window).bind("load", function () {
+                resize();
+            });
+        });
+    </script>
+</body>
+
+</html>
